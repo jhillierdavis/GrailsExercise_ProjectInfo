@@ -1,0 +1,4 @@
+mysql> create database projectinfo;
+mysql> grant all on projectinfo.* to 'piadmin'@'localhost' identified by 'pr0ject1nf0';
+
+mysql -u piadmin -p projectinfo

@@ -1,0 +1,14 @@
+TODO: Improve validation messages (e.g. for custom validation especially e.g. negative priority) 
+TODO: Priority field dependent on the number of projects  
+TODO: Web views (Scaffold?)
+TODO: RestController
+TODO: Handle change (update, deletion) of project priority?  Re-organise other priorities?
+TODO: Logging
+
+Done:
+
+* Disallow people with same full name (save or update)
+* 'dueDate' in future only
+* Default project list ordering by priority.
+* Project.projectManager mandatory 
+* Handle deletion of person. Disallow deletion unless no associated projects.

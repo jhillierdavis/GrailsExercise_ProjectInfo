@@ -1,0 +1,7 @@
+target-eclipse/*
+target/*
+*.bak
+.project
+.classpath
+.settings
+*.pdf
