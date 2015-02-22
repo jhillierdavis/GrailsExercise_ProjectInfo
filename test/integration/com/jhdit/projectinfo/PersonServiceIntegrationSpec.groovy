@@ -64,7 +64,7 @@ class PersonServiceIntegrationSpec extends IntegrationSpec {
 			!Person.findById(person.id)
 	}
 	
-/*	
+
 	void "Deletion prohibited for a person who is a PM on projects"()	{
 		given: 'A persisted person entity'
 			Person pm = new Person(firstname: "Billy", lastname: "Busy")
@@ -114,6 +114,6 @@ class PersonServiceIntegrationSpec extends IntegrationSpec {
 			Person.exists(pm.id)
 			Person.findById(techLead.id).getFullname() == techLead.getFullname() // Still exists!
 	}
-*/
+
 	
 }
