@@ -44,18 +44,17 @@
 					
 						<td><g:link action="show" id="${projectInstance.id}">${fieldValue(bean: projectInstance, field: "name")}</g:link></td>
 					
-						<td>${fieldValue(bean: projectInstance, field: "code")}</td>
+						<td><g:link action="show" id="${projectInstance.id}">${fieldValue(bean: projectInstance, field: "code")}</g:link></td>
 					
 						<td>${fieldValue(bean: projectInstance, field: "priority")}</td>
 					
-						<td><g:formatDate date="${projectInstance.dueDate}" /></td>
+						<td><g:formatDate date="${projectInstance.dueDate}" type="date" style="MEDIUM" /></td>
 					
 						<%-- <td>${fieldValue(bean: projectInstance, field: "projectManager")}</td> --%>
-						<td>${fieldValue(bean: projectInstance.projectManager, field: "fullname")}</td>
+						<td><g:link controller="person" action="show" id="${projectInstance?.projectManager?.id}">${fieldValue(bean: projectInstance.projectManager, field: "fullname")}</g:link></td>
 					
 						<%--  <td>${fieldValue(bean: projectInstance, field: "techLead")}</td> --%>
-						<td>${fieldValue(bean: projectInstance.techLead, field: "fullname")}</td>
-					
+						<td><g:link controller="person" action="show" id="${projectInstance?.techLead?.id}">${fieldValue(bean: projectInstance.techLead, field: "fullname")}</g:link></td>
 					</tr>
 				</g:each>
 				</tbody>

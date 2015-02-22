@@ -54,7 +54,7 @@
 				<li class="fieldcontain">
 					<span id="dueDate-label" class="property-label"><g:message code="project.dueDate.label" default="Due Date" /></span>
 					
-						<span class="property-value" aria-labelledby="dueDate-label"><g:formatDate date="${projectInstance?.dueDate}" /></span>
+						<span class="property-value" aria-labelledby="dueDate-label"><g:formatDate date="${projectInstance?.dueDate}" type="date" style="MEDIUM" /></span>
 					
 				</li>
 				</g:if>
@@ -85,7 +85,7 @@
 					
 				</li>
 				</g:if>
-			
+<%--			
 				<g:if test="${projectInstance?.dateCreated}">
 				<li class="fieldcontain">
 					<span id="dateCreated-label" class="property-label"><g:message code="project.dateCreated.label" default="Date Created" /></span>
@@ -103,7 +103,7 @@
 					
 				</li>
 				</g:if>
-			
+--%>			
 			</ol>
 			<g:form url="[resource:projectInstance, action:'delete']" method="DELETE">
 				<fieldset class="buttons">
