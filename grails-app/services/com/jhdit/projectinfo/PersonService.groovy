@@ -27,12 +27,12 @@ class PersonService {
 		// Handle not found or has associated projects
 		if (!person)	{
 			throw new SystemException(NO_MATCH + personId)
-		} else if (person.projects)	{
+		} else if (person.projects || Project.findAllByProjectManager(person) || Project.findAllByTechLead(person))	{
 			throw new SystemException(PERSON_HAS_PROJECTS + person)
-		}		
+		}	
 		
 		try	{	
-			person.delete(flush: true)
+			person.delete(failOnError: true, flush: true)
 		} catch (DataIntegrityViolationException e)	{
 		System.out.print("DEBUG: Failed to delete person: ${person} with projects: ${person.projects}")
 			throw new SystemException(PERSON_HAS_PROJECTS + person, e)
