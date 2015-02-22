@@ -10,7 +10,7 @@ import grails.transaction.Transactional
  *
  */
 
-@Transactional(readOnly = false)
+@Transactional(readOnly = true) // Default (overridden in udpate & delete)
 class PersonController {
 	def personService // Injected
 
@@ -99,6 +99,7 @@ class PersonController {
         }
     }
 */
+	@Transactional
 	def delete(Person personInstance) {
 		if (personInstance == null) {
 			notFound()
