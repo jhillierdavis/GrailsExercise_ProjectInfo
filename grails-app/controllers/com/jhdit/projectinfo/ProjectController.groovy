@@ -1,12 +1,14 @@
 package com.jhdit.projectinfo
 
+import static org.springframework.http.HttpStatus.*
+
 /**
  * Generated PersonController via static scaffolding:
  *
  *  grails generate-all com.jhdit.projectinfo.Project
  */
 
-import static org.springframework.http.HttpStatus.*
+
 import grails.transaction.Transactional
 
 @Transactional(readOnly = false)
