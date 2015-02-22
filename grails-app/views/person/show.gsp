@@ -76,7 +76,7 @@
 					<span id="projects-label" class="property-label"><g:message code="person.projects.label" default="Projects" /></span>
 					
 						<g:each in="${personInstance.projects}" var="p">
-						<span class="property-value" aria-labelledby="projects-label"><g:link controller="project" action="show" id="${p.id}">${p?.name}</g:link></span>
+						<span class="property-value" aria-labelledby="projects-label"><g:link controller="project" action="show" id="${p.id}">${p?.name} (${p.code}])</g:link></span>
 						</g:each>
 					
 				</li>

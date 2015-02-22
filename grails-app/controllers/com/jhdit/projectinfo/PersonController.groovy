@@ -12,7 +12,7 @@ import grails.transaction.Transactional
 
 @Transactional(readOnly = false)
 class PersonController {
-	def  personService // Injected
+	def personService // Injected
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 

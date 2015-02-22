@@ -1,5 +1,7 @@
 package com.jhdit.projectinfo
 
+import org.springframework.dao.DataIntegrityViolationException;
+
 import grails.transaction.Transactional
 
 /**
@@ -27,8 +29,13 @@ class PersonService {
 			throw new SystemException(NO_MATCH + personId)
 		} else if (person.projects)	{
 			throw new SystemException(PERSON_HAS_PROJECTS + person)
-		}
+		}		
 		
-		person.delete(flush: true)
+		try	{	
+			person.delete(flush: true)
+		} catch (DataIntegrityViolationException e)	{
+		System.out.print("DEBUG: Failed to delete person: ${person} with projects: ${person.projects}")
+			throw new SystemException(PERSON_HAS_PROJECTS + person, e)
+		}
     }
 }

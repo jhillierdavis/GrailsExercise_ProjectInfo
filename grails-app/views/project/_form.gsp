@@ -43,7 +43,7 @@
 		<g:message code="project.projectManager.label" default="Project Manager" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="projectManager" name="projectManager.id" from="${com.jhdit.projectinfo.Person.list()}" optionKey="id" required="" value="${projectInstance?.projectManager?.id}" class="many-to-one"/>
+	<g:select id="projectManager" name="projectManager.id" from="${com.jhdit.projectinfo.Person.list()}" optionKey="id" optionValue="fullname"  required="" value="${projectInstance?.projectManager?.id}" class="many-to-one"/>
 
 </div>
 
@@ -52,7 +52,7 @@
 		<g:message code="project.techLead.label" default="Tech Lead" />
 		
 	</label>
-	<g:select id="techLead" name="techLead.id" from="${com.jhdit.projectinfo.Person.list()}" optionKey="id" value="${projectInstance?.techLead?.id}" class="many-to-one" noSelection="['null': '']"/>
+	<g:select id="techLead" name="techLead.id" from="${com.jhdit.projectinfo.Person.list()}" optionKey="id" optionValue="fullname" value="${projectInstance?.techLead?.id}" class="many-to-one" noSelection="['null': '']"/>
 
 </div>
 

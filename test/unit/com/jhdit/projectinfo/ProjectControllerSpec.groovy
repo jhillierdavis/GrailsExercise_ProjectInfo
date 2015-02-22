@@ -1,18 +1,26 @@
 package com.jhdit.projectinfo
 
-
+import static com.jhdit.projectinfo.ProjectStatus.*
 
 import grails.test.mixin.*
 import spock.lang.*
 
 @TestFor(ProjectController)
-@Mock(Project)
+@Mock([Project, Person])
 class ProjectControllerSpec extends Specification {
 
     def populateValidParams(params) {
         assert params != null
         // TODO: Populate valid properties like...
         //params["name"] = 'someValidName'
+		
+		Person testPerson = new Person(firstname: "Joe", lastname: "Bloggs")
+		
+		params["name"] = "Test Project"
+		params["code"] = "PT_01" 
+		params["priority"] = 1
+		params["currentStatus"] =  RELEASE
+		params["projectManager"] = testPerson
     }
 
     void "Test the index action returns the correct model"() {

@@ -12,6 +12,12 @@ import spock.lang.Specification
 @Mock([Person, Project])
 class PersonServiceSpec extends Specification {
 	
+	void "Check service injection" () {
+		expect:
+			service
+	}
+
+	
 	void "Deletion using an invalid Person ID throws exception"()	{
 		when:
 			service.deletePerson(null)
@@ -35,7 +41,7 @@ class PersonServiceSpec extends Specification {
 	}
 
 	
-	void "Deletion prohibited for a person entity without associated projects"()	{
+	void "Deletion permitted for a person entity without associated projects"()	{
 		given: 'A person entity without projects'
 			Person person = new Person(firstname: "John", lastname: "Doe")
 		
@@ -55,28 +61,52 @@ class PersonServiceSpec extends Specification {
 	}
 	
 	
-	void "Deletion permitted for a person entity with associated projects"()	{
+	void "Deletion prohibited for a person who is a PM on projects"()	{
 		given: 'A persisted person entity'
-			Person person = new Person(firstname: "Billy", lastname: "Busy")
-			person.save(flush: true)
+			Person pm = new Person(firstname: "Billy", lastname: "Busy")
+			pm.save(flush: true)
 		
 		when: "Associated with a project & persist"
-			Project project = new Project(name: "Test Project", code: "PT_01", priority: 1, currentStatus: RELEASE, projectManager: person)
+			Project project = new Project(name: "Test Project", code: "PT_01", priority: 1, currentStatus: RELEASE, projectManager: pm)
 			project.save(flush: true)
-			
 		
 		then: "Exists"
-			Person.findById(person.id) == person
-			Person.exists(person.id)
+			Person.findById(pm.id) == pm
+			Person.exists(pm.id)
 			
 		when: "Deleted"
-			service.deletePerson(person.id)
+			service.deletePerson(pm.id)
 			
 		then: "Person entity is deleted"
 			def ex = thrown(SystemException)	
 			ex.message.startsWith(PersonService.PERSON_HAS_PROJECTS)
-			Person.exists(person.id)
-			Person.findById(person.id).getFullname() == person.getFullname() // Still exists!	
+			Person.exists(pm.id)
+			Person.findById(pm.id).getFullname() == pm.getFullname() // Still exists!	
+	}
+
+	void "Deletion prohibited for a person who is a Tech. Lead on projects"()	{
+		given: 'A persisted person entity'
+			Person pm = new Person(firstname: "Alice", lastname: "Agile")
+			Person techLead = new Person(firstname: "Josh", lastname: "Java")
+			pm.save()
+			techLead.save(flush: true)
+		
+		when: "Associated with a project & persist"
+			Project project = new Project(name: "Test Project", code: "PT_01", priority: 1, currentStatus: RELEASE, projectManager: pm, techLead: techLead)
+			project.save(flush: true)
+		
+		then: "Exists"
+			Person.findById(techLead.id) == techLead
+			Person.exists(techLead.id)
+			
+		when: "Deleted"
+			service.deletePerson(techLead.id)
+			
+		then: "Person entity is deleted"
+			def ex = thrown(SystemException)
+			ex.message.startsWith(PersonService.PERSON_HAS_PROJECTS)
+			Person.exists(techLead.id)
+			Person.findById(techLead.id).getFullname() == techLead.getFullname() // Still exists!
 	}
 
 }

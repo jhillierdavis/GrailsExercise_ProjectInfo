@@ -2,23 +2,6 @@
 
 
 
-<div class="fieldcontain ${hasErrors(bean: personInstance, field: 'projects', 'error')} ">
-	<label for="projects">
-		<g:message code="person.projects.label" default="Projects" />
-		
-	</label>
-	
-<ul class="one-to-many">
-<g:each in="${personInstance?.projects?}" var="p">
-    <li><g:link controller="project" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
-</g:each>
-<li class="add">
-<g:link controller="project" action="create" params="['person.id': personInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'project.label', default: 'Project')])}</g:link>
-</li>
-</ul>
-
-
-</div>
 
 <div class="fieldcontain ${hasErrors(bean: personInstance, field: 'firstname', 'error')} required">
 	<label for="firstname">
@@ -35,6 +18,25 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:textField name="lastname" required="" value="${personInstance?.lastname}"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: personInstance, field: 'projects', 'error')} ">
+	<label for="projects">
+		<g:message code="person.projects.label" default="Projects" />
+		
+	</label>
+	
+<ul class="one-to-many">
+<g:each in="${personInstance?.projects?}" var="p">
+    <%-- <li><g:link controller="project" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li> --%>
+    <li><g:link controller="project" action="show" id="${p.id}">${p?.name} (${p?.code})</g:link></li>
+</g:each>
+<li class="add">
+<g:link controller="project" action="create" params="['person.id': personInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'project.label', default: 'Project')])}</g:link>
+</li>
+</ul>
+
 
 </div>
 

@@ -63,7 +63,7 @@
 				<li class="fieldcontain">
 					<span id="projectManager-label" class="property-label"><g:message code="project.projectManager.label" default="Project Manager" /></span>
 					
-						<span class="property-value" aria-labelledby="projectManager-label"><g:link controller="person" action="show" id="${projectInstance?.projectManager?.id}">${projectInstance?.projectManager?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="projectManager-label"><g:link controller="person" action="show" id="${projectInstance?.projectManager?.id}">${projectInstance?.projectManager?.fullname}</g:link></span>
 					
 				</li>
 				</g:if>
@@ -72,7 +72,7 @@
 				<li class="fieldcontain">
 					<span id="techLead-label" class="property-label"><g:message code="project.techLead.label" default="Tech Lead" /></span>
 					
-						<span class="property-value" aria-labelledby="techLead-label"><g:link controller="person" action="show" id="${projectInstance?.techLead?.id}">${projectInstance?.techLead?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="techLead-label"><g:link controller="person" action="show" id="${projectInstance?.techLead?.id}">${projectInstance?.techLead?.fullname}</g:link></span>
 					
 				</li>
 				</g:if>
