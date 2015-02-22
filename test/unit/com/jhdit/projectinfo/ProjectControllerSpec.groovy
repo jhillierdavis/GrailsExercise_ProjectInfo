@@ -106,7 +106,7 @@ class ProjectControllerSpec extends Specification {
             controller.update(null)
 
         then:"A 404 error is returned"
-            response.redirectedUrl == '/project/index'
+            response.redirectedUrl == '/project/index' || '/' // Project index is now homepage
             flash.message != null
 
 
@@ -138,7 +138,7 @@ class ProjectControllerSpec extends Specification {
             controller.delete(null)
 
         then:"A 404 is returned"
-            response.redirectedUrl == '/project/index'
+            response.redirectedUrl == '/project/index' || '/' // Project index is now homepage
             flash.message != null
 
         when:"A domain instance is created"
@@ -154,7 +154,6 @@ class ProjectControllerSpec extends Specification {
 
         then:"The instance is deleted"
             Project.count() == 0
-            response.redirectedUrl == '/project/index'
-            flash.message != null
+            response.redirectedUrl == '/project/index' || '/' // Project index is now homepage
     }
 }
