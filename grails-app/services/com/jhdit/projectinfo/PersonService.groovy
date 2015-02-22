@@ -1,5 +1,6 @@
 package com.jhdit.projectinfo
 
+import org.apache.commons.logging.LogFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import grails.transaction.Transactional
@@ -10,6 +11,8 @@ import grails.transaction.Transactional
 
 @Transactional
 class PersonService {
+	private static final log = LogFactory.getLog(this)
+	
 	final static String NO_MATCH = "No Person found with ID: "
 	final static String PERSON_HAS_PROJECTS = "Cannot delete a person with associated projects! Person: "
 
@@ -34,7 +37,7 @@ class PersonService {
 		try	{	
 			person.delete(failOnError: true, flush: true)
 		} catch (DataIntegrityViolationException e)	{
-		System.out.print("DEBUG: Failed to delete person: ${person} with projects: ${person.projects}")
+			log.debug("DEBUG: Failed to delete person: ${person} with projects: ${person.projects}")
 			throw new SystemException(PERSON_HAS_PROJECTS + person, e)
 		}
     }
