@@ -30,7 +30,7 @@ class PersonServiceSpec extends Specification {
 
 	void "Deletion using a non existent/persisted Person throws exception"()	{
 		when:
-			int bogusId = 123
+			long bogusId = 123
 			!Person.exists(bogusId)
 			service.deletePerson(bogusId)
 		

@@ -16,7 +16,7 @@ class PersonService {
 	final static String NO_MATCH = "No Person found with ID: "
 	final static String PERSON_HAS_PROJECTS = "Cannot delete a person with associated projects! Person: "
 
-    def deletePerson(def personId) {
+    def deletePerson(final long personId) {
 		/*
 		if (!personId)	{
 			throw new IllegalArgumentException("NULL personId")
@@ -26,19 +26,25 @@ class PersonService {
 		
 		// Find the associated person
 		Person person = Person.findById(personId)
-		
-		// Handle not found or has associated projects
 		if (!person)	{
 			throw new SystemException(NO_MATCH + personId)
-		} else if (person.projects || Project.findAllByProjectManager(person) || Project.findAllByTechLead(person))	{
-			throw new SystemException(PERSON_HAS_PROJECTS + person)
-		}	
+		}
+
+		this.deletePerson(person)		
+    }
+	
+	def deletePerson(final Person person)	{		
+		assert person
 		
-		try	{	
+		if (person.projects || Project.findAllByProjectManager(person) || Project.findAllByTechLead(person))	{
+			throw new SystemException(PERSON_HAS_PROJECTS + person)
+		}
+		
+		try	{
 			person.delete(failOnError: true, flush: true)
 		} catch (DataIntegrityViolationException e)	{
 			log.debug("DEBUG: Failed to delete person: ${person} with projects: ${person.projects}")
 			throw new SystemException(PERSON_HAS_PROJECTS + person, e)
 		}
-    }
+	}
 }
