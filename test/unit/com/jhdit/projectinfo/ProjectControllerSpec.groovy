@@ -5,6 +5,14 @@ import static com.jhdit.projectinfo.ProjectStatus.*
 import grails.test.mixin.*
 import spock.lang.*
 
+/**
+ * Unit tests for PersonController
+ *
+ * Adapted from original generated via static scaffolding, via:
+ *
+ * grails generate-all com.jhdit.projectinfo.Project
+ */
+
 @TestFor(ProjectController)
 @Mock([Project, Person])
 class ProjectControllerSpec extends Specification {
