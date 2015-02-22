@@ -25,7 +25,7 @@
 		<g:message code="project.priority.label" default="Priority" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:field name="priority" type="number" value="${projectInstance.priority}" required=""/>
+	<g:field name="priority" type="number" value="${projectInstance.priority}" required="" min="1" max="${Project.count() + (projectInstance.id ? 0 : 1)}" />
 
 </div>
 
@@ -34,7 +34,7 @@
 		<g:message code="project.dueDate.label" default="Due Date" />
 		
 	</label>
-	<g:datePicker name="dueDate" precision="day"  value="${projectInstance?.dueDate}" default="none" noSelection="['': '']" />
+	<g:datePicker name="dueDate" precision="day"  value="${projectInstance?.dueDate}" default="none" noSelection="['': '']" relativeYears="[0..5]" />
 
 </div>
 
