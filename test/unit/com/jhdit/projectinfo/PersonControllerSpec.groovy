@@ -6,7 +6,7 @@ import spock.lang.*
 /**
  * Unit tests for PersonController
  * 
- * NB: Originally generated via static scaffolding, via:
+ * Adapted from original generated via static scaffolding, via:
  * 
  * grails generate-all com.jhdit.projectinfo.Person
  */
