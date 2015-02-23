@@ -13,7 +13,7 @@ import grails.transaction.Transactional
 class PersonService {
 	private static final log = LogFactory.getLog(this)
 	
-	final static String NO_MATCH = "No Person found with ID: "
+	final static String NO_MATCH_BY_ID = "No Person found with ID: "
 	final static String PERSON_HAS_PROJECTS = "Cannot delete a person with associated projects! Person: "
 
     def deletePerson(final long personId) {
@@ -27,7 +27,7 @@ class PersonService {
 		// Find the associated person
 		Person person = Person.findById(personId)
 		if (!person)	{
-			throw new SystemException(NO_MATCH + personId)
+			throw new SystemException(NO_MATCH_BY_ID + personId)
 		}
 
 		this.deletePerson(person)		
