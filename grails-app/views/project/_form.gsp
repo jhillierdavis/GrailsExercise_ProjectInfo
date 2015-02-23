@@ -32,7 +32,9 @@
 		<g:message code="project.dueDate.label" default="Due Date" />
 		
 	</label>
-	<g:datePicker name="dueDate" precision="day"  value="${projectInstance?.dueDate}" default="none" noSelection="['': '']" relativeYears="[0..5]" />
+	<%--<g:datePicker name="dueDate" precision="day"  value="${projectInstance?.dueDate}" default="none" noSelection="['': '']" relativeYears="[-5..5]" /> --%>
+	<%-- TODO: JHD: Dynamically assign years --%>  
+	<g:datePicker name="dueDate" precision="day"  value="${projectInstance?.dueDate}" default="none" noSelection="['': '']" years="[2015,2016,2017,2018,2019,2020]" />
 
 </div>
 
