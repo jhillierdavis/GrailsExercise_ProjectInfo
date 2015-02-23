@@ -13,6 +13,7 @@ import grails.transaction.Transactional
 
 @Transactional(readOnly = false)
 class ProjectController {
+	def projectService // Injected
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -22,26 +23,44 @@ class ProjectController {
     }
 
     def show(Project projectInstance) {
+		System.out.println("DEBUG: ProjectController.show(${projectInstance?.code}) ... ")
         respond projectInstance
     }
 
     def create() {
+		System.out.println("DEBUG: ProjectController.create() ... ")
         respond new Project(params)
     }
 
     @Transactional
     def save(Project projectInstance) {
+		System.out.println("DEBUG: ProjectController.save(${projectInstance?.code}) ... ")
         if (projectInstance == null) {
             notFound()
             return
         }
-
+/*
         if (projectInstance.hasErrors()) {
             respond projectInstance.errors, view:'create'
             return
         }
+*/
+		if (projectInstance.hasErrors() && !this.projectService.hasSuppressedError(projectInstance)) {
+				respond projectInstance.errors, view:'create'
+				return
+		}
+		
+		assert this.projectService
+		
+		// Check priority <= max
+		if (this.projectService.isPriorityTooLarge(projectInstance))	{
+			flash.message = "Priority is too large!"
+			respond projectInstance.errors, view:'create'
+			return
 
-        projectInstance.save flush:true
+		}
+		this.projectService.saveProject projectInstance
+		
 
         request.withFormat {
             form multipartForm {
@@ -53,23 +72,49 @@ class ProjectController {
     }
 
     def edit(Project projectInstance) {
+		System.out.println("DEBUG: ProjectController.edit(${projectInstance?.code}) ... ")
         respond projectInstance
     }
 
-    @Transactional
+    // @Transactional
     def update(Project projectInstance) {
+		System.out.println("DEBUG: ProjectController.update(${projectInstance?.code}) ... ")
+		
         if (projectInstance == null) {
             notFound()
             return
         }
 
+/*		
         if (projectInstance.hasErrors()) {
             respond projectInstance.errors, view:'edit'
             return
         }
 
         projectInstance.save flush:true
-
+*/
+		
+		// if (projectInstance.hasErrors() && !this.projectService.hasSuppressedError(projectInstance)) {
+		if (projectInstance.hasErrors()) {
+			respond projectInstance.errors, view:'edit'
+			return
+		}
+		
+		assert this.projectService
+		
+		// Check priority <= max
+		if (this.projectService.isPriorityTooLarge(projectInstance))	{
+			flash.message = "Priority is too large!"
+			respond projectInstance.errors, view:'edit'
+			return
+	
+		}
+		// this.projectService.updateProject projectInstance
+		// projectInstance.save flush:true
+		System.out.println("DEBUG: Discard updates ... ")
+		Project p = Project.get(projectInstance.id)
+		p.discard()
+		
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'Project.label', default: 'Project'), projectInstance.id])
