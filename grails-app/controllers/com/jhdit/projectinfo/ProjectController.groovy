@@ -23,18 +23,15 @@ class ProjectController {
     }
 
     def show(Project projectInstance) {
-		System.out.println("DEBUG: ProjectController.show(${projectInstance?.code}) ... ")
         respond projectInstance
     }
 
     def create() {
-		System.out.println("DEBUG: ProjectController.create() ... ")
         respond new Project(params)
     }
 
     @Transactional
     def save(Project projectInstance) {
-		System.out.println("DEBUG: ProjectController.save(${projectInstance?.code}) ... ")
         if (projectInstance == null) {
             notFound()
             return
@@ -58,14 +55,11 @@ class ProjectController {
     }
 
     def edit(Project projectInstance) {
-		System.out.println("DEBUG: ProjectController.edit(${projectInstance?.code}) ... ")
         respond projectInstance
     }
 
     @Transactional
     def update(Project projectInstance) {
-		System.out.println("DEBUG: ProjectController.update(${projectInstance?.code}) ... ")
-		
         if (projectInstance == null) {
             notFound()
             return
@@ -96,7 +90,10 @@ class ProjectController {
             return
         }
 
-        projectInstance.delete flush:true
+//        projectInstance.delete flush:true
+		assert this.projectService
+		this.projectService.deleteProject projectInstance
+
 
         request.withFormat {
             form multipartForm {
