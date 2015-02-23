@@ -76,20 +76,6 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 		x.priority == 6
 	}
 
-	@Ignore
-	void "Creating a new project with invalid priority"() {
-
-		given: "New (unsaved) project"
-		Project x = new Project(name: "Project X", code: "PR_X", priority: 7, currentStatus: DEVELOPMENT, projectManager: testPerson)
-
-		when: "A new project is created"
-		x.priority == 7
-		service.saveProject(x)
-
-		then: "The priorities of the project are re-organised"
-		// def ex = thrown(SystemException)
-	}
-	
 	void "Cannot creating a new project priority above number of projects"() {
 		given: "New (unsaved) project"
 		Project x = new Project(name: "Project X", code: "PR_X", priority: 7, currentStatus: DEVELOPMENT, projectManager: testPerson)
@@ -122,7 +108,7 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 	}
 
 
-	@Ignore
+	
 	void "Updated project with increased priority"() {
 		expect:
 		b.priority == 2
@@ -140,7 +126,6 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 		e.priority == 5
 	}
 
-	@Ignore
 	void "Updated project with decreased priority"() {
 		expect:
 		b.priority == 2
