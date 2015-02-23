@@ -76,36 +76,58 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 		x.priority == 6
 	}
 
-	void "Cannot creating a new project priority above number of projects"() {
-		given: "New (unsaved) project"
+	void "Cannot creating a new project priority with a priority greater than number of projects"() {
+		given: "A new (unsaved) project with invalid priority"
 		Project x = new Project(name: "Project X", code: "PR_X", priority: 7, currentStatus: DEVELOPMENT, projectManager: testPerson)
 
 		expect:
 		x.priority == 7
 
-		when: "A new project is created"
+		when: "It is saved"
 		service.saveProject(x)
 
-		then: "Fails validation"
+		then: "It fails validation"
 		def ex = thrown(ValidationException)
 		ex.errors.hasFieldErrors('priority')
 	}
 
-	void "Cannot update a new project priority above number of projects"() {
-		given: "New (unsaved) project"
+	void "Cannot update an existing project with a priority greater than number of projects"() {
+		given: "Existing project"
 		Project x = new Project(name: "Project X", code: "PR_X", priority: 6, currentStatus: DEVELOPMENT, projectManager: testPerson).save()
 
 		expect:
 		x.priority == 6
 
-		when: "A new project is created"
-		x.priority = 7  
-		service.saveProject(x) // Update
+		when: "An update is attempted with an invalid priority"
+		x.priority = 100
+		service.updateProject(x) // Update
 
-		then: "Fails validation"
+		then: "It fails validation"
 		def ex = thrown(ValidationException)
 		ex.errors.hasFieldErrors('priority')
 	}
+	
+	void "Create project with existing priority reorganises existing project priorities"() {
+		expect: "the following initial setup"
+		a.priority == 1
+		b.priority == 2
+		c.priority == 3
+		d.priority == 4
+		e.priority == 5
+		
+		when: "An existing project is edited & the priority (only) is increased"
+		Project x = new Project(name: "Project X", code: "PR_X", priority: 2, currentStatus: DEVELOPMENT, projectManager: testPerson).save()
+		service.saveProject(x)
+
+		then: "The priorities of the other project are re-organised accordingly"
+		a.priority == 1
+		x.priority == 2
+		b.priority == 3
+		c.priority == 4
+		d.priority == 5
+		e.priority == 6
+	}
+
 	
 	void "Updated project with increased priority has reorganised existing project priorities"() {
 		expect: "the following initial setup"
