@@ -191,6 +191,28 @@ class ProjectService {
 		
 	}
 */
+	def deleteProject(final Project project) {
+		assert project
+		
+		def matches = Project.findAllByPriorityGreaterThanEquals(project.priority, [sort: "priority", order: "desc"])
+		
+		project.delete flush:true
+		
+		if (!matches)	{
+			return
+		}
+
+		// Adjust project priorities
+		for (Project existingProject: matches)	{
+			if (existingProject == project) {
+				continue
+			}
+			existingProject.priority--
+			existingProject.save flush:true
+		}
+	}
+	
+	
 	private def reorganisePriorities(Project project)	{
 		assert project
 		
