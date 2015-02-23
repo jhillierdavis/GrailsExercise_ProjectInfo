@@ -1,7 +1,5 @@
 <%@ page import="com.jhdit.projectinfo.Project" %>
 
-
-
 <div class="fieldcontain ${hasErrors(bean: projectInstance, field: 'name', 'error')} required">
 	<label for="name">
 		<g:message code="project.name.label" default="Name" />
@@ -25,8 +23,8 @@
 		<g:message code="project.priority.label" default="Priority" />
 		<span class="required-indicator">*</span>
 	</label>
+ 	
 	<g:field name="priority" type="number" value="${projectInstance.priority}" required="" min="1" max="${Project.count() + (projectInstance.id ? 0 : 1)}" />
-
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: projectInstance, field: 'dueDate', 'error')} ">
