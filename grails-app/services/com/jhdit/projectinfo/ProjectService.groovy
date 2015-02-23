@@ -17,19 +17,48 @@ class ProjectService {
 	
 	def updateProject(Project project) {
 		assert project
-		
-		if (this.isPriorityTooLarge(project))	{
-			throw new SystemException("Project prioriy is too high. Priority: ${project.priority}")
-		}		
+		def persistedPriority = project.getPersistentValue('priority')
+		boolean isIncreasedPriority =  persistedPriority > project.priority
+		System.out.println "Update ${project.code} updatedPriority ${project.priority} persistedPriority: ${persistedPriority}"
+
+		project.save failOnError: true, flush:true
+
+		def matches = Project.list()
 		
 
+		if (matches && matches.size() > 1)	{
+			// Re-organise projects which have the same or greater priorities
+			int x = 0
+			for (Project existingProject: matches)	{
+				x++
+				if (existingProject == project) {
+					continue
+				}
+	
+				if (existingProject.priority != x)	{
+					existingProject.priority = x
+					existingProject.save()
+				} else if (existingProject.priority == project.priority)	{
+					if (isIncreasedPriority)	{
+						existingProject.priority++
+					} else {
+						existingProject.priority--
+					}
+					existingProject.save()
+				}
+				
+			}
+		}
+	}
 
+/*
+	def updateProject(Project project) {
+		assert project
 		
-
 		def updatedPriority = project.priority
  		def persistedPriority = project.getPersistentValue('priority')
 		// def persistedPriority = getPersistedPriority(project)
-		System.out.println "Update ${project.code} ${project.priority} persistedPriority =${persistedPriority}"
+		System.out.println "Update ${project.code} ${project.priority} persistedPriority: ${persistedPriority}"
 
 		System.out.println "Changed priority: updated:${updatedPriority} persisted: ${persistedPriority} ${project.code}"
 		// assert project.isDirty('priority') // Ensure dealing with an update
@@ -85,7 +114,7 @@ class ProjectService {
 		project.priority = updatedPriority
 		project.save(flush: true)	
 	}
-	
+*/	
 	private def getPersistedPriority(final Project project)	{
 		// NB: project.getPersistentValue('priority') doesn't appear to work unfortunately in integration tests!
 		
@@ -100,11 +129,6 @@ class ProjectService {
 	
 	
 	
-	boolean isPriorityTooLarge(final Project project) {
-		assert project
-		return project.priority > 1 + Project.count()
-	}
-
 /*
 	private void updatePriorities(Project project)	{
 		assert project // Ensure not NULL
@@ -190,16 +214,5 @@ class ProjectService {
 			existingProject.priority++
 			existingProject.save flush:true			
 		}
-	}
-	
-
-	
-	boolean hasSuppressedError(final Project project)	{
-		if (project.hasErrors())	{
-			if (project.errors.hasFieldErrors('priority') && project.errors.errorCount == 1)	{
-				return true
-			}
-		}
-		return false
-	}
+	}	
 }
