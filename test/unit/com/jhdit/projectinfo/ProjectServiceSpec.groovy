@@ -67,40 +67,4 @@ class ProjectServiceSpec extends Specification {
 		e.priority == 5
 		x.priority == 6
 	}
-
-
-		
-	void "Updated project with increased priority"() {
-		expect:
-		b.priority == 2
-		d.priority == 4
-		
-		when: "An existing project is edited & the priority (only) is increased"
-		d.priority = 2
-		service.updateProject(d)
-
-		then: "The priorities of the project are re-organised"
-		a.priority == 1
-		d.priority == 2
-		b.priority == 3
-		c.priority == 4
-		e.priority == 5
-	}
-
-	void "Updated project with decreased priority"() {
-		expect:
-		b.priority == 2
-		d.priority == 4
-		
-		when: "An existing project is edited & the priority (only) is decreased"
-		b.priority = 4
-		service.updateProject(b)
-
-		then: "The priorities of the project are re-organised"
-		a.priority == 1
-		c.priority == 2
-		d.priority == 3
-		b.priority == 4
-		e.priority == 5
-	}
 }
