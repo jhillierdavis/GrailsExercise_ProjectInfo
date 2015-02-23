@@ -21,11 +21,8 @@ import com.jhdit.projectinfo.ProjectStatus;
  */
 
 @ToString(includeNames=true, includeFields=true) // Display for dev. usage
-class Project {
+class Project extends BaseEntity {
 	// private static Logger log = LoggerFactory.getLogger(Project.class)
-
-	Date dateCreated // Auto-populated audit field
-	Date lastUpdated // Auto-populated audit field
 		
 	String name
 	String code
@@ -62,20 +59,18 @@ class Project {
 	
 	
 	def beforeValidate()	{
-		def maxPriority = Project.count() + (this.isPersisted() ? 0 : 1)
-		if (this.priority > maxPriority)	{
+		if (this.isPriorityExcessive())	{
 			// TODO: JHD: Handle args in validation message
 			this.errors.rejectValue("priority", "default.invalid.max.size.message", "Too large!")
 		}
-	}
+	}	
 	
-	/**
-	 * Indicates whether the associated entity has been persisted to the database (based on the presence of an assigned ID)
-	 * @return True if persisted
-	 */
+	boolean isPriorityExcessive()	{
+		def maxPriority = Project.count() + (this.isPersisted() ? 0 : 1)
+		return this.priority > maxPriority
+	}
 	
 	boolean isPersisted()	{
 		return this.id // Note: Groovy Truth - non-null object references are coerced to true.
 	}
-
 }

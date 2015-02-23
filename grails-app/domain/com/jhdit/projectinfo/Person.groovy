@@ -9,10 +9,7 @@ import groovy.transform.ToString;
  */
 
 @ToString(includeNames=true, includeFields=true) // Display for dev. usage
-class Person {
-	Date dateCreated // Auto-populated audit field
-	Date lastUpdated // Auto-populated audit field
-	
+class Person extends BaseEntity {
 	String firstname
 	String lastname
 	
@@ -42,5 +39,4 @@ class Person {
 	public String getFullname()	{
 		return this.firstname + " " + this.lastname;
 	}
-
 }
