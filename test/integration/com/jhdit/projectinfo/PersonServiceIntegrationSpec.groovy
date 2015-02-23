@@ -13,7 +13,7 @@ import static com.jhdit.projectinfo.ProjectStatus.*
 
 class PersonServiceIntegrationSpec extends IntegrationSpec {
 	def personService // Auto-wired / injected
-	def service
+	def service // Alias (for convenience)
 
     def setup() {
 		service = personService

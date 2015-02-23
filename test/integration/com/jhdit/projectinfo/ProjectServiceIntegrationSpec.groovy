@@ -1,21 +1,29 @@
-
 package com.jhdit.projectinfo
 
-import grails.test.mixin.TestFor
+
+import spock.lang.Ignore;
+import grails.test.spock.IntegrationSpec
 import grails.validation.ValidationException;
-import spock.lang.Specification
 import static com.jhdit.projectinfo.ProjectStatus.*
 
 /**
- * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
+ * Integration tests for ProjectService.
+ *
+ * E.g. run via:
+ *
+ * grails test-app integration: ProjectServiceIntegrationSpec
  */
-@TestFor(ProjectService)
-@Mock([Person, Project])
-class ProjectServiceSpec extends Specification {
+
+class ProjectServiceIntegrationSpec extends IntegrationSpec {
+	def projectService // Auto-wired / injected
+	def service // Alias (for convenience)
 	Person testPerson
 	Project a, b, c, d, e
 
+
 	def setup() {
+		service = projectService
+		
 		testPerson = new Person(firstname: "John", lastname: "Smith").save()
 		a = new Project(name: "Project A", code: "PR_A", priority: 1, currentStatus: BRIEFING, projectManager: testPerson).save()
 		b = new Project(name: "Project B", code: "PR_B", priority: 2, currentStatus: SCOPING, projectManager: testPerson).save()
@@ -68,8 +76,53 @@ class ProjectServiceSpec extends Specification {
 		x.priority == 6
 	}
 
+	@Ignore
+	void "Creating a new project with invalid priority"() {
 
-		
+		given: "New (unsaved) project"
+		Project x = new Project(name: "Project X", code: "PR_X", priority: 7, currentStatus: DEVELOPMENT, projectManager: testPerson)
+
+		when: "A new project is created"
+		x.priority == 7
+		service.saveProject(x)
+
+		then: "The priorities of the project are re-organised"
+		// def ex = thrown(SystemException)
+	}
+	
+	void "Cannot creating a new project priority above number of projects"() {
+		given: "New (unsaved) project"
+		Project x = new Project(name: "Project X", code: "PR_X", priority: 7, currentStatus: DEVELOPMENT, projectManager: testPerson)
+
+		expect:
+		x.priority == 7
+
+		when: "A new project is created"
+		service.saveProject(x)
+
+		then: "Fails validation"
+		def ex = thrown(ValidationException)
+		ex.errors.hasFieldErrors('priority')
+	}
+
+	void "Cannot update a new project priority above number of projects"() {
+		given: "New (unsaved) project"
+		Project x = new Project(name: "Project X", code: "PR_X", priority: 6, currentStatus: DEVELOPMENT, projectManager: testPerson).save()
+
+		expect:
+		x.priority == 6
+
+		when: "A new project is created"
+		x.priority = 7  
+		service.saveProject(x) // Update
+
+		then: "Fails validation"
+		def ex = thrown(ValidationException)
+		ex.errors.hasFieldErrors('priority')
+	}
+
+
+	@Ignore
 	void "Updated project with increased priority"() {
 		expect:
 		b.priority == 2
@@ -87,6 +140,7 @@ class ProjectServiceSpec extends Specification {
 		e.priority == 5
 	}
 
+	@Ignore
 	void "Updated project with decreased priority"() {
 		expect:
 		b.priority == 2
@@ -103,4 +157,5 @@ class ProjectServiceSpec extends Specification {
 		b.priority == 4
 		e.priority == 5
 	}
+	
 }

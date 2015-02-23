@@ -16,7 +16,6 @@ class PersonServiceSpec extends Specification {
 		expect:
 			service
 	}
-
 	
 	void "Deletion using an invalid Person ID throws exception"()	{
 		when:
@@ -36,7 +35,7 @@ class PersonServiceSpec extends Specification {
 		
 		then:
 			def ex = thrown(SystemException)
-			ex.message.startsWith(PersonService.NO_MATCH + bogusId)
+			ex.message.startsWith(PersonService.NO_MATCH_BY_ID + bogusId)
 			// System.out.println "DEBUG: Expected exception: ${ex}"
 	}
 
