@@ -11,20 +11,94 @@ class ProjectService {
 	def saveProject(Project project) {
 		assert project
 		
-		reorganisePriorities(project)
-		project.save failOnError: true, flush:true
+		project.save(failOnError: true, flush:true)
+		reorganisePriorities(project)		
 	}
 	
 	def updateProject(Project project) {
 		assert project
+		
+		def currentPriority = project.priority
 		def persistedPriority = project.getPersistentValue('priority')
-		boolean isIncreasedPriority =  persistedPriority > project.priority
-		System.out.println "Update ${project.code} updatedPriority ${project.priority} persistedPriority: ${persistedPriority}"
+		if (persistedPriority == currentPriority)	{
+			persistedPriority = getPersistedPriority(project)
+		}
+		if (persistedPriority == currentPriority)	{
+			persistedPriority = findGap(currentPriority)
+		}
 
-		project.save failOnError: true, flush:true
+		project.validate()
+		project.save(failOnError: true, flush:true)
+		
+		if (persistedPriority == currentPriority)	{
+			return
+		}
+		
+		boolean isIncreasedPriority =  persistedPriority > project.priority
+		log.info "Update ${project.code} updatedPriority: ${project.priority} persistedPriority: ${persistedPriority}"
 
 		def matches = Project.list()
 		
+		if (matches && matches.size() > 1)	{
+			// Re-organise projects which have the same or greater priorities
+			int x = 0
+			for (Project existingProject: matches)	{
+				x++
+				if (existingProject == project) {
+					continue
+				}
+	
+				if (existingProject.priority != x)	{
+					existingProject.priority = x
+					existingProject.save()
+				} else if (existingProject.priority == project.priority)	{
+					if (isIncreasedPriority)	{
+						existingProject.priority++
+					} else {
+						existingProject.priority--
+					}
+					existingProject.save()
+				}
+				
+			}
+		}
+	}
+	
+	def findGap(def defaultValue)	{
+		for (i in 1..Project.count())	{
+			if (!Project.findByPriority(i))	{
+				return i
+			}
+		}
+		return defaultValue
+	}
+	
+	/*
+	def updateProject(Project project) {
+		assert project
+		
+		project.validate()
+		if (project.hasErrors())	{
+			return
+		}
+		
+		def persistedPriority = project.getPersistentValue('priority')
+		if (persistedPriority == project.priority)	{
+			persistedPriority = getPersistedPriority(project)
+		}	
+		
+		if (persistedPriority == project.priority)	{
+			throw new SystemException("Cannot determine change in priority: Update ${project.code} updatedPriority: ${project.priority} persistedPriority: ${persistedPriority}")
+		}
+		
+		boolean isIncreasedPriority =  persistedPriority > project.priority
+		log.info "Update ${project.code} updatedPriority: ${project.priority} persistedPriority: ${persistedPriority}"
+
+		
+		
+		def matches = Project.list()
+		
+		project.save()
 
 		if (matches && matches.size() > 1)	{
 			// Re-organise projects which have the same or greater priorities
@@ -50,6 +124,7 @@ class ProjectService {
 			}
 		}
 	}
+	*/
 
 /*
 	def updateProject(Project project) {
@@ -196,7 +271,7 @@ class ProjectService {
 		
 		def matches = Project.findAllByPriorityGreaterThanEquals(project.priority, [sort: "priority", order: "desc"])
 		
-		project.delete flush:true
+		project.delete(failOnError: true, flush:true)
 		
 		if (!matches)	{
 			return
@@ -208,7 +283,7 @@ class ProjectService {
 				continue
 			}
 			existingProject.priority--
-			existingProject.save flush:true
+			existingProject.save(failOnError: true, flush:true)	
 		}
 	}
 	
@@ -231,10 +306,10 @@ class ProjectService {
 //				System.out.println "existingProject: ${existingProject}"
 				continue
 			}
-			System.out.println "existingProject.priority: ${existingProject.priority}"
-			log.info "existingProject: ${existingProject}"
+			
 			existingProject.priority++
-			existingProject.save flush:true			
+			log.info "Incrementing existingProject: ${existingProject.code} priority to ${existingProject.priority}"
+			existingProject.save(failOnError: true, flush:true)	
 		}
 	}	
 }
