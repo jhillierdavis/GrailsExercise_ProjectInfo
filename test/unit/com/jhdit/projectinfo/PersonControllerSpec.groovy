@@ -133,16 +133,6 @@ class PersonControllerSpec extends Specification {
     }
 
     void "Test that the delete action deletes an instance if it exists"() {
-		//Defines the behavior of setup
-		setup: "Only one invocation of service method"
-			def myService = Mock(PersonService){
-				//Make sure serviceMethod is called only once from the controller
-				//Beauty of Spock is that you can test the cardinality of
-				//method invocations.
-				1 * deletePerson(1)
-			}
-			controller.personService = myService
-				
         when:"The delete action is called for a null instance"
             request.contentType = FORM_CONTENT_TYPE
             request.method = 'DELETE'
@@ -161,10 +151,14 @@ class PersonControllerSpec extends Specification {
             Person.count() == 1
 
         when:"The domain instance is passed to the delete action"
+			def mockService = Mock(PersonService){
+				1 * deletePerson(person.id) >> person.delete()
+			}
+			controller.personService = mockService
             controller.delete(person)
 
         then:"personService.deletePerson(1) method is invoked"
-            // Person.count() == 0
+            Person.count() == 0
             response.redirectedUrl == '/person/index'
             flash.message != null
     }
