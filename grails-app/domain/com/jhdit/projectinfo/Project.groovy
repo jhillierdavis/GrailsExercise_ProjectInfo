@@ -38,12 +38,13 @@ class Project {
 	static constraints = {
 		name blank: false, size:3..100, unique: false
 		code blank: false, size:3..20, unique: true
-		priority unique: true
+		// priority unique: true // Enforce at service layer
 		dueDate nullable: true
 		projectManager nullable: false
 		techLead nullable: true	// Assumption: Tech. Lead. can be assigned after project has begun
-		priority ( validator: { value ->
-			return value > 0 // Ensure priority is greater than zero			
+		priority ( validator: { value ->			
+			return value > 0 // Ensure priority is greater than zero
+			// NB: Unfortunately cannot seem to apply Projects.count() here for (dynamic) max value			
 		})
 		dueDate ( validator: { value ->
 			// Ensure 'dueDate' is in the future (if non-NULL)
@@ -58,4 +59,23 @@ class Project {
 		sort priority: "asc" // default sort
 		// sort: 'priority'
 	}
+	
+	
+	def beforeValidate()	{
+		def maxPriority = Project.count() + (this.isPersisted() ? 0 : 1)
+		if (this.priority > maxPriority)	{
+			// TODO: JHD: Handle args in validation message
+			this.errors.rejectValue("priority", "default.invalid.max.size.message", "Too large!")
+		}
+	}
+	
+	/**
+	 * Indicates whether the associated entity has been persisted to the database (based on the presence of an assigned ID)
+	 * @return True if persisted
+	 */
+	
+	boolean isPersisted()	{
+		return this.id // Note: Groovy Truth - non-null object references are coerced to true.
+	}
+
 }
