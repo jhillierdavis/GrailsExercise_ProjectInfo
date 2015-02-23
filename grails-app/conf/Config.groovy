@@ -97,12 +97,56 @@ environments {
 }
 
 // log4j configuration
+
+// Log4J Configuration Quick Reference:
+// ====================================
+//
+//
+//       Priority order is DEBUG < INFO < WARN < ERROR < FATAL
+//
+//
+//       PatternLayout conversion characters:
+//
+//        %c   Category of the logging event
+//        %C   Fully qualified class name of the caller
+//        %d   Date of the logging event  (example: %d{HH:mm:ss,SSS} )
+//        %F   File name where the logging request was issued (caution: extremely slow)
+//        %l   Location information of the caller (caution: extremely slow)
+//        %L   Line number from where the logging request was issued (caution: extremely slow)
+//        %m   Application-supplied message
+//        %M   Method name from where the logging request was issued (caution: extremely slow)
+//        %n   Line separator
+//        %p   Priority of the logging event
+//        %r   Number of milliseconds since the start of the application
+//        %t   Name of the thread that generated the logging event
+//        %x   Nested diagnostic context associated with the thread
+//        %%   A single percent sign
+//
+//       Format modifiers examples:
+//
+//        %20c     Left pad with spaces if category is less than 20 characters long
+//        %-20c    Right pad with spaces if category is less than 20 characters long
+//        %.30c    Truncate from the beginning if category is more than 30 chars long
+//        %20.30c  Left pad 20 chars + truncate from beginning if more than 30 chars
+//        %-20.30c Right pad 20 chars + truncate from beginning if more than 30 chars
+//
+//       Examples:  "%r [%t] %-5p %c %x - %m\n"
+//                  "%-6r [%15.15t] %-5p %30.30c %x - %m\n"
+
+// log4j configuration
 log4j.main = {
     // Example of changing the log pattern for the default console appender:
-    //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+/*	
+    appenders {
+        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n'), threshold: org.apache.log4j.Level.INFO
+    }
+	
+	root {
+		info 'stdout'
+	}
+	
+	info    'com.jhdit'
+*/
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
@@ -115,4 +159,5 @@ log4j.main = {
            'org.springframework',
            'org.hibernate',
            'net.sf.ehcache.hibernate'
+           
 }
