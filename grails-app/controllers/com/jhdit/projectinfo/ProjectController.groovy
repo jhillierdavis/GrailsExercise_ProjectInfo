@@ -39,28 +39,14 @@ class ProjectController {
             notFound()
             return
         }
-/*
-        if (projectInstance.hasErrors()) {
-            respond projectInstance.errors, view:'create'
-            return
-        }
-*/
-		if (projectInstance.hasErrors() && !this.projectService.hasSuppressedError(projectInstance)) {
+		
+		if (projectInstance.hasErrors()) {
 				respond projectInstance.errors, view:'create'
 				return
 		}
 		
 		assert this.projectService
-		
-		// Check priority <= max
-		if (this.projectService.isPriorityTooLarge(projectInstance))	{
-			flash.message = "Priority is too large!"
-			respond projectInstance.errors, view:'create'
-			return
-
-		}
-		this.projectService.saveProject projectInstance
-		
+		this.projectService.saveProject projectInstance		
 
         request.withFormat {
             form multipartForm {
@@ -76,7 +62,7 @@ class ProjectController {
         respond projectInstance
     }
 
-    // @Transactional
+    @Transactional
     def update(Project projectInstance) {
 		System.out.println("DEBUG: ProjectController.update(${projectInstance?.code}) ... ")
 		
@@ -85,35 +71,13 @@ class ProjectController {
             return
         }
 
-/*		
-        if (projectInstance.hasErrors()) {
-            respond projectInstance.errors, view:'edit'
-            return
-        }
-
-        projectInstance.save flush:true
-*/
-		
-		// if (projectInstance.hasErrors() && !this.projectService.hasSuppressedError(projectInstance)) {
 		if (projectInstance.hasErrors()) {
 			respond projectInstance.errors, view:'edit'
 			return
 		}
 		
-		assert this.projectService
-		
-		// Check priority <= max
-		if (this.projectService.isPriorityTooLarge(projectInstance))	{
-			flash.message = "Priority is too large!"
-			respond projectInstance.errors, view:'edit'
-			return
-	
-		}
-		// this.projectService.updateProject projectInstance
-		// projectInstance.save flush:true
-		System.out.println("DEBUG: Discard updates ... ")
-		Project p = Project.get(projectInstance.id)
-		p.discard()
+		assert this.projectService		
+		this.projectService.updateProject projectInstance
 		
         request.withFormat {
             form multipartForm {
