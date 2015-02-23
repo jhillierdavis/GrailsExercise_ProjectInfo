@@ -106,41 +106,64 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 		def ex = thrown(ValidationException)
 		ex.errors.hasFieldErrors('priority')
 	}
-
-
 	
-	void "Updated project with increased priority"() {
-		expect:
+	void "Updated project with increased priority has reorganised existing project priorities"() {
+		expect: "the following initial setup"
+		a.priority == 1
 		b.priority == 2
-		d.priority == 4
+		c.priority == 3
+		d.priority == 4 
+		e.priority == 5
 		
 		when: "An existing project is edited & the priority (only) is increased"
 		d.priority = 2
 		service.updateProject(d)
 
-		then: "The priorities of the project are re-organised"
+		then: "The priorities of the other project are re-organised accordingly"
 		a.priority == 1
-		d.priority == 2
+		d.priority == 2 // Updated
 		b.priority == 3
 		c.priority == 4
 		e.priority == 5
 	}
 
-	void "Updated project with decreased priority"() {
-		expect:
+	void "Updated project with decreased priority has reorganised existing project priorities"() {
+		expect: "the following initial setup"
+		a.priority == 1
 		b.priority == 2
-		d.priority == 4
+		c.priority == 3
+		d.priority == 4 
+		e.priority == 5
 		
 		when: "An existing project is edited & the priority (only) is decreased"
 		b.priority = 4
 		service.updateProject(b)
 
-		then: "The priorities of the project are re-organised"
+		then: "The priorities of the other project are re-organised accordingly"
 		a.priority == 1
 		c.priority == 2
 		d.priority == 3
-		b.priority == 4
+		b.priority == 4 // Updated
 		e.priority == 5
 	}
-	
+
+	void "Deleted project has reorganised existing project priorities"() {
+		expect: "the following initial setup"
+		a.priority == 1
+		b.priority == 2
+		c.priority == 3
+		d.priority == 4 
+		e.priority == 5
+		
+		when: "An existing project is deleted"
+		service.deleteProject(b)
+
+		then: "The priorities of the remaining project are re-organised"
+		!Project.findById(b.id)
+		a.priority == 1
+		c.priority == 2
+		d.priority == 3
+		e.priority == 4
+	}
+
 }
