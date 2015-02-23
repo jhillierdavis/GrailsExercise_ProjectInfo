@@ -18,8 +18,10 @@ hibernate {
 environments {
     development {
         dataSource {
-			// dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-			// url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
+			/*
+			dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+			url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
+		    */
 
 			pooled = true
 			dbCreate = "update"
@@ -47,6 +49,7 @@ environments {
 				minEvictableIdleTimeMillis = 1000 * 60 * 5
 				timeBetweenEvictionRunsMillis = 1000 * 60 * 5
 			 }
+			 
         }
     }
     test {
