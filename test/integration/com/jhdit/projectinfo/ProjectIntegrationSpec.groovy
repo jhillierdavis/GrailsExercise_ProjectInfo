@@ -1,16 +1,10 @@
 package com.jhdit.projectinfo
 
-// import org.apache.log4j.spi.LoggerFactory;
-// import org.slf4j.Logger;
-
 import static com.jhdit.projectinfo.ProjectStatus.*
+
 import spock.lang.Ignore;
-
-import com.jhdit.projectinfo.Project;
-
 import grails.validation.ValidationException
 import grails.test.spock.IntegrationSpec
-// import spock.lang.Specification
 
 /**
  * Integration tests for Project domain class 
@@ -21,7 +15,6 @@ import grails.test.spock.IntegrationSpec
  */
 
 class ProjectIntegrationSpec extends IntegrationSpec {
-	// private static Logger log = LoggerFactory.getLogger(ProjectIntegrationSpec.class)
 	private Project testProject
 	private testPerson
 	private static def BLANK_FIELD = "    "
@@ -40,9 +33,9 @@ class ProjectIntegrationSpec extends IntegrationSpec {
 		then: "it is saved successfully & can be found in the database"
 		testProject.errors.errorCount == 0
 		testProject.id != null
-		Project p = Project.get(testProject.id)
-		p.name == testProject.name
-		// System.out.println "DEBUG: Project p=${p}"
+		Project foundProject = Project.get(testProject.id)
+		foundProject.name == testProject.name
+		// System.out.println "DEBUG: foundProject=${foundProject}"
 	}
 
 	def "Updating a saved project changes its properties"() {
@@ -200,7 +193,7 @@ class ProjectIntegrationSpec extends IntegrationSpec {
 
 	private def setupUnpersistedTestProjects()	{
 		Person pm1  = new Person(firstname: 'Alice', lastname: 'Agile').save()
-		Person pm2  = new Person(firstname: 'Wally', lastname: 'Wasterfall').save()
+		Person pm2  = new Person(firstname: 'Wally', lastname: 'Waterfall').save()
 
 		def existingProject1 = new Project(name: "Medium Priority Project", code: "PT_02", priority: 2, currentStatus: QA, projectManager: pm1)
 		def existingProject2 = new Project(name: "Low Priority Project", code: "PT_03", priority: 3, currentStatus: BRIEFING, projectManager: pm2)
@@ -221,11 +214,4 @@ class ProjectIntegrationSpec extends IntegrationSpec {
 			project.save(failOnError: true, flush: (i == 1 + projects.size() ? true: false))
 		}
 	}
-
-	private void debugValidationErrors(ValidationException ex)	{
-		for (error in ex.errors)	{
-			System.out.println("DEBUG: validation error: ${error}")
-		}
-	}
-
 }

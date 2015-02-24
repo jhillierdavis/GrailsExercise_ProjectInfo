@@ -22,9 +22,7 @@ class PersonServiceSpec extends Specification {
 			service.deletePerson(null)
 			
 		then:
-			// def ex = thrown(IllegalArgumentException)
-			def ex = thrown(AssertionError)
-			
+			thrown(AssertionError)			
 	}
 
 	void "Deletion using a non existent/persisted Person throws exception"()	{
