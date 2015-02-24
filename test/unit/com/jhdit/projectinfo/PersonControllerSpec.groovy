@@ -153,7 +153,7 @@ class PersonControllerSpec extends Specification {
 
         when:"The domain instance is passed to the delete action"
 			def mockService = Mock(PersonService){
-				1 * deletePerson(person.id) >> person.delete()
+				1 * deletePerson(person) >> person.delete()
 			}
 			controller.personService = mockService
             controller.delete(person)

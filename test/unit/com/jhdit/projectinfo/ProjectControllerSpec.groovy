@@ -154,8 +154,6 @@ class ProjectControllerSpec extends Specification {
     }
 
     void "Test that the delete action deletes an instance if it exists"() {
-
-		
         when:"The delete action is called for a null instance"
             request.contentType = FORM_CONTENT_TYPE
             request.method = 'DELETE'

@@ -17,11 +17,6 @@ class PersonService {
 	final static String PERSON_HAS_PROJECTS = "Cannot delete a person with associated projects! Person: "
 
     def deletePerson(final long personId) {
-		/*
-		if (!personId)	{
-			throw new IllegalArgumentException("NULL personId")
-		}
-		*/
 		assert personId
 		
 		// Find the associated person

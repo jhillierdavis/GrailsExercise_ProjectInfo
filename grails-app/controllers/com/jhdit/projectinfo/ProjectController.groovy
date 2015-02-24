@@ -3,11 +3,12 @@ package com.jhdit.projectinfo
 import static org.springframework.http.HttpStatus.*
 
 /**
- * Generated PersonController via static scaffolding:
+ * Front controller: ProjectController
+ *
+ * Generated via static scaffolding:
  *
  *  grails generate-all com.jhdit.projectinfo.Project
  */
-
 
 import grails.transaction.Transactional
 

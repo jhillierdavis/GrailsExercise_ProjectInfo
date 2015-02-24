@@ -4,10 +4,11 @@ import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
 /**
- * Generated PersonController via static scaffolding:
+ * Front controller: PersonController 
+ * 
+ * Generated via static scaffolding:
  * 
  *  grails generate-all com.jhdit.projectinfo.Person
- *
  */
 
 @Transactional(readOnly = true) // Default (overridden in udpate & delete)
@@ -79,26 +80,6 @@ class PersonController {
         }
     }
 
-/*	
-    @Transactional
-    def delete(Person personInstance) {
-
-        if (personInstance == null) {
-            notFound()
-            return
-        }
-
-        personInstance.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Person.label', default: 'Person'), personInstance.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
-*/
 	@Transactional
 	def delete(Person personInstance) {
 		if (personInstance == null) {
@@ -106,23 +87,19 @@ class PersonController {
 			return
 		}
 
-		assert personService // Check service injected
-		
 		def messageCode = 'default.deleted.message'
-		def personId = personInstance.id		
+		assert personService // Check service injected
 		try {
-			personService.deletePerson(personId)
+			personService.deletePerson(personInstance)
 		}
 		catch (SystemException e) {
-//			System.out.println "DEBUG: exception=${e}"
-//			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'person.label', default: 'Person'), personId])
 			messageCode = 'default.not.deleted.message'
 		}
 		
 		// redirect action: "index"
 		request.withFormat {
 			form multipartForm {
-				flash.message = message(code: messageCode, args: [message(code: 'Person.label', default: 'Person'), personId])
+				flash.message = message(code: messageCode, args: [message(code: 'Person.label', default: 'Person'), personInstance.id])
 				redirect action:"index", method:"GET"
 			}
 			'*'{ render status: NO_CONTENT }
