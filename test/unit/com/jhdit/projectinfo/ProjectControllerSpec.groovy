@@ -19,8 +19,9 @@ class ProjectControllerSpec extends Specification {
 
     def populateValidParams(params) {
         assert params != null
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
+		
+        // Populate valid properties like...
+        // params["name"] = 'someValidName'
 		
 		Person testPerson = new Person(firstname: "Joe", lastname: "Bloggs")
 		
