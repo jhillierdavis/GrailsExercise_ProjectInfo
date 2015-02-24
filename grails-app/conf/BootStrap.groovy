@@ -1,15 +1,25 @@
+import grails.util.Environment
+
 import com.jhdit.projectinfo.Person
 import com.jhdit.projectinfo.Project
 
+
 import static com.jhdit.projectinfo.ProjectStatus.*
+
+/**
+ * Class to generate some sample data (e.g. for convenience during development, for UI testing) 
+ */
 
 class BootStrap {
 	private boolean isBootstapDataWanted = true
 
     def init = { servletContext ->
 		
-		if (!isBootstapDataWanted)	{
-			return // Bail out before loading data (if desired)
+		def currentEnv = Environment.current
+		
+		// Bootstrap only when required (e.g. for development env.)
+		if (!isBootstapDataWanted || currentEnv != Environment.DEVELOPMENT)	{
+			return // Bail out before loading data (if appropriate)
 		}
 		
 		// Add some initial people & projects to play with during development
@@ -33,7 +43,7 @@ class BootStrap {
 		def projectB = new Project(name: "Project B", code: "PR-B", priority: 3, currentStatus: BRIEFING, projectManager: waterfall, dueDate: new Date() + 500).save()
 		def projectC = new Project(name: "Project C", code: "PR-C", priority: 4, currentStatus: DEVELOPMENT, projectManager: spiral, techLead: rails, dueDate: new Date() + 15).save()
 		def projectD = new Project(name: "Project D", code: "PR-D", priority: 5, currentStatus: INTERACTION, projectManager: agile, techLead: grails, dueDate: new Date() + 75).save()
-		def projectE = new Project(name: "Project E", code: "PR-E", priority: 6, currentStatus: SCOPING, projectManager: waterfall, techLead: grails).save()
+		def projectE = new Project(name: "Project E", code: "PR-E", priority: 6, currentStatus: SCOPING, projectManager: waterfall, techLead: waterfall).save()
 
     }
 	
