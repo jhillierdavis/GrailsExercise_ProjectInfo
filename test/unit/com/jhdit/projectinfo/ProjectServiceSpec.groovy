@@ -7,7 +7,9 @@ import spock.lang.Specification
 import static com.jhdit.projectinfo.ProjectStatus.*
 
 /**
- * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
+ * Unit tests for ProjectService
+ * 
+ * NB: See integration tests (see @ProjectServiceIntegrationSpec) for more extensive set of tests (which exercise real entities).
  */
 @TestFor(ProjectService)
 @Mock([Person, Project])
@@ -24,11 +26,8 @@ class ProjectServiceSpec extends Specification {
 		e = new Project(name: "Project E", code: "PR_E", priority: 5, currentStatus: RELEASE, projectManager: testPerson).save(flush: true)
 	}
 
-	def cleanup() {
-	}
-
 	void "Check service injection" () {
-		expect:
+		expect "auto-wiring OK":
 		service
 	}
 

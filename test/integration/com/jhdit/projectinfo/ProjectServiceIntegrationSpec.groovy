@@ -20,10 +20,9 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 	Person testPerson
 	Project a, b, c, d, e
 
-
 	def setup() {
 		service = projectService
-		
+
 		testPerson = new Person(firstname: "John", lastname: "Smith").save()
 		a = new Project(name: "Project A", code: "PR_A", priority: 1, currentStatus: BRIEFING, projectManager: testPerson).save()
 		b = new Project(name: "Project B", code: "PR_B", priority: 2, currentStatus: SCOPING, projectManager: testPerson).save()
@@ -90,7 +89,7 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 
 	void "Cannot update an existing project with a priority greater than number of projects"() {
 		given: "Existing project"
-		int initialNumberOfProjects = Project.count() 
+		int initialNumberOfProjects = Project.count()
 		Project x = new Project(name: "Project X", code: "PR_X", priority: 1 + initialNumberOfProjects, currentStatus: DEVELOPMENT, projectManager: testPerson).save()
 
 		expect:
@@ -105,7 +104,7 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 		def ex = thrown(ValidationException)
 		ex.errors.hasFieldErrors('priority')
 	}
-	
+
 	void "Create project with existing priority reorganises existing project priorities"() {
 		expect: "the following initial setup"
 		a.priority == 1
@@ -113,7 +112,7 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 		c.priority == 3
 		d.priority == 4
 		e.priority == 5
-		
+
 		when: "An existing project is edited & the priority (only) is increased"
 		Project x = new Project(name: "Project X", code: "PR_X", priority: 2, currentStatus: DEVELOPMENT, projectManager: testPerson).save()
 		service.saveProject(x)
@@ -127,15 +126,15 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 		e.priority == 6
 	}
 
-	
+
 	void "Updated project with increased priority has reorganised existing project priorities"() {
 		expect: "the following initial setup"
 		a.priority == 1
 		b.priority == 2
 		c.priority == 3
-		d.priority == 4 
+		d.priority == 4
 		e.priority == 5
-		
+
 		when: "An existing project is edited & the priority (only) is increased"
 		d.priority = 2
 		service.updateProject(d)
@@ -153,9 +152,9 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 		a.priority == 1
 		b.priority == 2
 		c.priority == 3
-		d.priority == 4 
+		d.priority == 4
 		e.priority == 5
-		
+
 		when: "An existing project is edited & the priority (only) is decreased"
 		b.priority = 4
 		service.updateProject(b)
@@ -173,9 +172,9 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 		a.priority == 1
 		b.priority == 2
 		c.priority == 3
-		d.priority == 4 
+		d.priority == 4
 		e.priority == 5
-		
+
 		when: "An existing project is deleted"
 		service.deleteProject(b)
 

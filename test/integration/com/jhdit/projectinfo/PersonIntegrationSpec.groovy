@@ -11,21 +11,21 @@ import grails.validation.ValidationException;
 
 class PersonIntegrationSpec extends IntegrationSpec {
 	Person testPerson // Default test double
-	
-		def setup() {
-			 testPerson = new Person(firstname: "John", lastname: "Smith")
-		}
 
-    void "Creation a person entity & check persisted"() {
+	def setup() {
+		testPerson = new Person(firstname: "John", lastname: "Smith")
+	}
+
+	void "Creation a person entity & check persisted"() {
 		when:
-			Person person = new Person(firstname: "John", lastname: "Smith")
-			person.save()
-			
+		Person person = new Person(firstname: "John", lastname: "Smith")
+		person.save()
+
 		then:
-			Person.get(person.id) == person
-		
-    }
-	
+		Person.get(person.id) == person
+
+	}
+
 	void "Delete an existing person entity & then ensure non-existent"() {
 		given:
 		Person person = new Person(firstname: "John", lastname: "Smith")
@@ -33,12 +33,12 @@ class PersonIntegrationSpec extends IntegrationSpec {
 
 		when:
 		person.delete()
-		
+
 		then:
-			!person.exists()
-			!Person.get(person.id)		
+		!person.exists()
+		!Person.get(person.id)
 	}
-	
+
 	void "Update an existing person entity & then ensure current"() {
 		given:
 		Person person = new Person(firstname: "John", lastname: "Smith")
@@ -48,13 +48,13 @@ class PersonIntegrationSpec extends IntegrationSpec {
 		person.firstname = "Jane"
 		person.lastname = "Jones"
 		person.save()
-		
+
 		then:
-			def foundPerson = Person.findByFirstname("Jane")
-			foundPerson.lastname == "Jones"
+		def foundPerson = Person.findByFirstname("Jane")
+		foundPerson.lastname == "Jones"
 	}
 
-	
+
 	void "List existing people entities"() {
 		given:
 		Person person1 = new Person(firstname: "John", lastname: "Smith")
@@ -70,31 +70,31 @@ class PersonIntegrationSpec extends IntegrationSpec {
 		def existingPeopleList = Person.list()
 		existingPeopleList.size() == 3
 	}
-	
+
 	void "Fullname unique, on save"() {
 		when:
-			Person personWithSameFullname = new Person(firstname: testPerson.firstname, lastname: testPerson.lastname)
-			testPerson.save()
-			personWithSameFullname.save(failOnError: true, flush: true)
-			
+		Person personWithSameFullname = new Person(firstname: testPerson.firstname, lastname: testPerson.lastname)
+		testPerson.save()
+		personWithSameFullname.save(failOnError: true, flush: true)
+
 		then:
-			def e = thrown(ValidationException)
-			personWithSameFullname.errors.errorCount == 1
+		def e = thrown(ValidationException)
+		personWithSameFullname.errors.errorCount == 1
 	}
-	
+
 	void "Fullname unique, on update"() {
 		given:
-			Person anotherPerson = new Person(firstname: 'Jane', lastname: testPerson.lastname)
-			testPerson.save()
-			anotherPerson.save(failOnError: true, flush: true)
-		
+		Person anotherPerson = new Person(firstname: 'Jane', lastname: testPerson.lastname)
+		testPerson.save()
+		anotherPerson.save(failOnError: true, flush: true)
+
 		when:
-			anotherPerson.firstname = testPerson.firstname
-			anotherPerson.save(failOnError: true, flush: true)
-			
+		anotherPerson.firstname = testPerson.firstname
+		anotherPerson.save(failOnError: true, flush: true)
+
 		then:
-			def e = thrown(ValidationException)
-			anotherPerson.errors.errorCount == 1
+		def e = thrown(ValidationException)
+		anotherPerson.errors.errorCount == 1
 	}
 
 }
