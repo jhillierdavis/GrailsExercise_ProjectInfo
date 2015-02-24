@@ -49,14 +49,28 @@ class Project extends BaseEntity {
 	
 	
 	def beforeValidate()	{
-		if (this.isPriorityExcessive())	{
-			// TODO: JHD: Handle args in this validation message
-			this.errors.rejectValue("priority", "default.invalid.max.size.message", "Too large!")
+		final def currentPriority = this.priority
+		final def maxPriority = getMaxPriority()
+
+		if (currentPriority > maxPriority)	{
+
+			//	Message parameter info. (from 'Grails in Action, 2nd ed.' P.95)
+			//
+			// {0}—The name of the domain class property.
+			// {1}—The name of the domain class.
+			// {2}—The invalid value.
+			// {3}—The limiting value in the constraint, such as a maximum value or a matching pattern. Applies to match, max, min, maxSize, minSize, inList, and equals constraints.
+			// {4}—The upper bound for a constraint ({3} is the lower bound). Applies to range and size constraints.
+
+			this.errors.rejectValue("priority", "default.invalid.max.size.message", [
+				'priority',
+				'class Project',
+				currentPriority,
+				maxPriority] as Object[], "Priority exceeds maximum value!")
 		}
-	}	
-	
-	boolean isPriorityExcessive()	{
-		def maxPriority = Project.count() + (this.isPersisted() ? 0 : 1)
-		return this.priority > maxPriority
-	}	
+	}
+
+	private def getMaxPriority()	{
+		return Project.count() + (this.isPersisted() ? 0 : 1)
+	}
 }
