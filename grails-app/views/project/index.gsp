@@ -38,6 +38,8 @@
 						<th><g:message code="project.projectManager.label" default="Project Manager" /></th>
 					
 						<th><g:message code="project.techLead.label" default="Tech Lead" /></th>
+						
+						<th><g:message code="project.currentStatus.label" default="Current Status" /></th>
 					
 					</tr>
 				</thead>
@@ -58,6 +60,8 @@
 					
 						<%--  <td>${fieldValue(bean: projectInstance, field: "techLead")}</td> --%>
 						<td><g:link controller="person" action="show" id="${projectInstance?.techLead?.id}">${fieldValue(bean: projectInstance.techLead, field: "fullname")}</g:link></td>
+						
+						<td>${fieldValue(bean: projectInstance, field: "currentStatus")}</td>
 					</tr>
 				</g:each>
 				</tbody>
