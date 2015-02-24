@@ -5,8 +5,10 @@ import static org.springframework.http.HttpStatus.*
 /**
  * Front controller: ProjectController
  *
- * Generated via static scaffolding:
- *
+ * Uses an injected service (see @ProjectService) for any non-trivial CRUD operations (to encapsulate application logic in service layer). 
+ * 
+ * Initial version generated via Grails static scaffolding:
+ * 
  *  grails generate-all com.jhdit.projectinfo.Project
  */
 
@@ -91,10 +93,8 @@ class ProjectController {
             return
         }
 
-//        projectInstance.delete flush:true
 		assert this.projectService
 		this.projectService.deleteProject projectInstance
-
 
         request.withFormat {
             form multipartForm {

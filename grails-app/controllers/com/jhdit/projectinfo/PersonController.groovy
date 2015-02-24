@@ -6,7 +6,9 @@ import grails.transaction.Transactional
 /**
  * Front controller: PersonController 
  * 
- * Generated via static scaffolding:
+ * Uses an injected service (see @PersonService) for any non-trivial CRUD operations (to encapsulate application logic in service layer). 
+ * 
+ * Initial version generated via Grails static scaffolding:
  * 
  *  grails generate-all com.jhdit.projectinfo.Person
  */
