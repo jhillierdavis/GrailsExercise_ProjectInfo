@@ -1,13 +1,7 @@
 package com.jhdit.projectinfo
 
-import groovy.transform.ToString;
-
-import java.util.Date;
-
-import org.apache.log4j.spi.LoggerFactory;
-import org.slf4j.Logger;
-
-import com.jhdit.projectinfo.ProjectStatus;
+import groovy.transform.ToString
+import java.util.Date
 
 /**
  * Domain entity capturing project information. 
@@ -21,9 +15,7 @@ import com.jhdit.projectinfo.ProjectStatus;
  */
 
 @ToString(includeNames=true, includeFields=true) // Display for dev. usage
-class Project extends BaseEntity {
-	// private static Logger log = LoggerFactory.getLogger(Project.class)
-		
+class Project extends BaseEntity {		
 	String name
 	String code
 	Person projectManager
@@ -58,7 +50,7 @@ class Project extends BaseEntity {
 	
 	def beforeValidate()	{
 		if (this.isPriorityExcessive())	{
-			// TODO: JHD: Handle args in validation message
+			// TODO: JHD: Handle args in this validation message
 			this.errors.rejectValue("priority", "default.invalid.max.size.message", "Too large!")
 		}
 	}	
@@ -66,9 +58,5 @@ class Project extends BaseEntity {
 	boolean isPriorityExcessive()	{
 		def maxPriority = Project.count() + (this.isPersisted() ? 0 : 1)
 		return this.priority > maxPriority
-	}
-	
-	boolean isPersisted()	{
-		return this.id // Note: Groovy Truth - non-null object references are coerced to true.
-	}
+	}	
 }
