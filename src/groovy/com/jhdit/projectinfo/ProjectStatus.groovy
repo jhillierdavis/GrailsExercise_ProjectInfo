@@ -1,15 +1,9 @@
 package com.jhdit.projectinfo
 
 /*
-public enum ProjectStatus {
-	BRIEFING('Briefing'),
-	SCOPING('Scoping'),
-	INTERACTION('Interaction'),
-	DEVELOPMENT('Development'),
-	QA('QA'),
-	RELEASE('Release')
-}
-*/
+ * Enumeration for project states.
+ * See @Project 
+ */
 
 public enum ProjectStatus {
 	BRIEFING,

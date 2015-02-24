@@ -1,7 +1,7 @@
 package com.jhdit.projectinfo
 
 /**
- * General unchecked exception for system errors.
+ * General purpose unchecked exception for system errors in the application.
  */
 
 class SystemException extends RuntimeException {
