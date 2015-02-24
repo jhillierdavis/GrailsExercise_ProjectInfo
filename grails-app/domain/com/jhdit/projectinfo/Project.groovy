@@ -52,9 +52,7 @@ class Project extends BaseEntity {
 	static mapping = {
 		id column: 'project_id' // Override the default identifier property
 		table 'projects' // Customized table name
-		// autoTimestamp true 
 		sort priority: "asc" // default sort
-		// sort: 'priority'
 	}
 	
 	
