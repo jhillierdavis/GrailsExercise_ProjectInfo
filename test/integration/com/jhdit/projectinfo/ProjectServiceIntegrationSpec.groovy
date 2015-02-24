@@ -32,9 +32,6 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 		e = new Project(name: "Project E", code: "PR_E", priority: 5, currentStatus: RELEASE, projectManager: testPerson).save(flush: true)
 	}
 
-	def cleanup() {
-	}
-
 	void "Check service injection" () {
 		expect:
 		service
@@ -93,13 +90,15 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 
 	void "Cannot update an existing project with a priority greater than number of projects"() {
 		given: "Existing project"
-		Project x = new Project(name: "Project X", code: "PR_X", priority: 6, currentStatus: DEVELOPMENT, projectManager: testPerson).save()
+		int initialNumberOfProjects = Project.count() 
+		Project x = new Project(name: "Project X", code: "PR_X", priority: 1 + initialNumberOfProjects, currentStatus: DEVELOPMENT, projectManager: testPerson).save()
 
 		expect:
-		x.priority == 6
+		initialNumberOfProjects == 5
+		x.priority == 1 + initialNumberOfProjects
 
 		when: "An update is attempted with an invalid priority"
-		x.priority = 100
+		x.priority = 2 + initialNumberOfProjects
 		service.updateProject(x) // Update
 
 		then: "It fails validation"
@@ -187,5 +186,4 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 		d.priority == 3
 		e.priority == 4
 	}
-
 }
