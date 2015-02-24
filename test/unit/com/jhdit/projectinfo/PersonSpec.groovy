@@ -51,12 +51,12 @@ class PersonSpec extends Specification {
 	}
 
 	
-	void "displayString() check"()	{
-		when:
+	void "getFullname() check"()	{
+		when "A person has a full name":
 			testPerson = new Person(firstname: "John", lastname: "Smith")
 		
-		then:
-			testPerson.displayString() == "John Smith"
+		then "Their fullname is the concatonation":
+			testPerson.getFullname() == "John Smith"
 	}
 	
 	void "Cannot creation Person instance without mandatory properties"() {
