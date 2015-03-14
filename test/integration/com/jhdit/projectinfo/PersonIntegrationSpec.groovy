@@ -6,7 +6,11 @@ import grails.test.spock.IntegrationSpec
 import grails.validation.ValidationException;
 
 /**
- * Integration test for a Person domain entity. 
+ * Integration test for a Person domain entity.
+ *  
+ * E.g. run via:
+ *
+ * grails test-app integration: PersonIntegrationSpec
  */
 
 class PersonIntegrationSpec extends IntegrationSpec {
